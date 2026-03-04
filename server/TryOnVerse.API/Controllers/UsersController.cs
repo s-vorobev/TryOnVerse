@@ -4,6 +4,7 @@ using TryOnVerse.API.Data;
 using TryOnVerse.API.Models;
 using TryOnVerse.API.DTOs;
 using TryOnVerse.API.Helpers;
+using TryOnVerse.API.Common;
 
 namespace TryOnVerse.API.Controllers;
 
@@ -18,7 +19,7 @@ public class UsersController : ControllerBase
         _context = context;
     }
 
-    // POST: api/users
+    // POST: api/users/customers
     [HttpPost]
     [Route("customers")]
     public async Task<IActionResult> CreateCustomer([FromBody] RegisterCustomerDto dto)
@@ -35,7 +36,7 @@ public class UsersController : ControllerBase
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             Email = dto.Email,
-            Role = "Customer",
+            Role = UserRoleConstants.Customer,
             PasswordHash = PasswordHasher.HashPassword(dto.Password),
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,

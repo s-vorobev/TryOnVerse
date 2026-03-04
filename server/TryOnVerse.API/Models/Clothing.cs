@@ -3,6 +3,7 @@ namespace TryOnVerse.API.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TryOnVerse.API.Common;
 
 public enum ClothingType
 {
@@ -14,12 +15,12 @@ public class Clothing
 {
     public int ClothingID { get; set; }
 
-    [Required, MaxLength(100)]
+    [Required, MaxLength(DbConstants.Clothing.NameMaxLength)]
     public string Name { get; set; } = null!;
 
     public string Description { get; set; } = null!;
 
-    [Required, MaxLength(50)]
+    [Required, MaxLength(DbConstants.Clothing.CategoryMaxLength)]
     public string Category { get; set; } = null!;
 
     [Required]
@@ -31,16 +32,16 @@ public class Clothing
     [Required]
     public int StockQuantity { get; set; } = 0;
 
-    [MaxLength(20)]
+    [MaxLength(DbConstants.Clothing.SizeMaxLength)]
     public string Size { get; set; } = null!;
 
-    [MaxLength(30)]
+    [MaxLength(DbConstants.Clothing.ColorMaxLength)]
     public string Color { get; set; } = null!;
 
-    [MaxLength(255)]
+    [MaxLength(DbConstants.Clothing.ImgUrlMaxLength)]
     public string ImageURL { get; set; } = null!;
 
-    [MaxLength(255)]
+    [MaxLength(DbConstants.Clothing.ModelUrlMaxLength)]
     public string Model3DURL { get; set; } = null!;
 
     public bool IsActive { get; set; } = true;

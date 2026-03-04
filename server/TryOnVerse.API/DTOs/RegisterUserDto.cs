@@ -1,23 +1,24 @@
 namespace TryOnVerse.API.DTOs;
 
 using System.ComponentModel.DataAnnotations;
+using TryOnVerse.API.Common;
 
 public class RegisterCustomerDto
 {
     [Required]
-    [MaxLength(50)]
+    [MaxLength(DbConstants.User.FirstNameMaxLength)]
     public string FirstName { get; set; } = null!;
 
     [Required]
-    [MaxLength(50)]
+    [MaxLength(DbConstants.User.LastNameMaxLength)]
     public string LastName { get; set; } = null!;
 
     [Required]
     [EmailAddress]
-    [MaxLength(100)]
+    [MaxLength(DbConstants.User.EmailMaxLength)]
     public string Email { get; set; } = null!;
 
     [Required]
-    [MinLength(12)]
+    [MinLength(DbConstants.User.PasswordMinLength)]
     public string Password { get; set; } = null!;
 }
