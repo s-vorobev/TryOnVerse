@@ -21,7 +21,7 @@ namespace TryOnVerse.API.Helpers
                 MemorySize = 1024 * 16
             };
 
-            byte[] hashBytes = argon2.GetBytes(16); // 16-byte hash
+            byte[] hashBytes = argon2.GetBytes(256);
             return Convert.ToBase64String(hashBytes);
         }
     }
