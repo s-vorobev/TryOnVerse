@@ -1,0 +1,10 @@
+CREATE TABLE Payments (
+    PaymentID INT AUTO_INCREMENT PRIMARY KEY,
+    UNIQUE (OrderID) INT NOT NULL,
+    Amount DECIMAL(10,2) NOT NULL,
+    PaymentMethod VARCHAR(30) NOT NULL,
+    PaymentStatus VARCHAR(30) NOT NULL DEFAULT 'Pending',
+    TransactionReference VARCHAR(100),
+    PaidAt TIMESTAMP NULL DEFAULT NULL,
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
