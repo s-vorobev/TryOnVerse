@@ -3,11 +3,10 @@ using TryOnVerse.API.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// 1. Add services
+builder.Services.AddControllers(); // Enable API controllers
 
+// 2. Add DbContext for MySQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySql(
         builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -15,23 +14,33 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     )
 );
 
-// CORS for React
+// 3. Add Swagger for API documentation and testing
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// 4. Configure CORS to allow requests from React frontend
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReact",
-        policy => policy
-            .WithOrigins("http://localhost:5173")
-            .AllowAnyHeader()
-            .AllowAnyMethod());
+    options.AddPolicy("AllowReact", policy =>
+        policy.WithOrigins("http://localhost:5173") // React dev server
+              .AllowAnyHeader()
+              .AllowAnyMethod());
 });
 
 var app = builder.Build();
 
-app.UseCors("AllowReact");
+// 5. Use middleware
+app.UseCors("AllowReact");          // Enable CORS
+app.UseHttpsRedirection();          // Redirect HTTP to HTTPS
 
-app.UseHttpsRedirection();
-app.UseAuthorization();
+// 6. Enable Swagger UI
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "TryOnVerse API V1");
+    c.RoutePrefix = string.Empty; // Swagger UI at root: http://localhost:<port>/
+});
 
-app.MapControllers();
+app.MapControllers();              // Map controller routes
 
-app.Run();
+app.Run();                          // Start the web server
