@@ -1,4 +1,4 @@
-namespace TryOnVerse.API.Data;
+namespace TryOnVerse.API.Models;
 
 using System;
 using System.ComponentModel.DataAnnotations;

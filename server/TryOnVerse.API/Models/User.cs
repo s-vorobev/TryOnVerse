@@ -1,8 +1,9 @@
-namespace TryOnVerse.API.Data;
+namespace TryOnVerse.API.Models;
 
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 public class User
 {
@@ -22,6 +23,7 @@ public class User
 
     [Required]
     [MaxLength(255)]
+    [JsonIgnore] // Never expose the hash in JSON
     public string PasswordHash { get; set; } = null!;
 
     [Required]
@@ -30,13 +32,13 @@ public class User
 
     public DateTime? LoginAt { get; set; }
 
-    public DateTime CreatedAt { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public DateTime UpdatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     // Navigation Properties
-    public ICollection<Cart> Carts { get; set; } = null!;
-    public ICollection<Address> Addresses { get; set; } = null!;
-    public ICollection<Order> Orders { get; set; } = null!;
-    public ICollection<Review> Reviews { get; set; } = null!;
+    public ICollection<Cart> Carts { get; set; } = new List<Cart>();
+    public ICollection<Address> Addresses { get; set; } = new List<Address>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<Review> Reviews { get; set; } = new List<Review>();
 }

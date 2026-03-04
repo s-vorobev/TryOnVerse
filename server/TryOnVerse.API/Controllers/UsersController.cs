@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TryOnVerse.API.Data;
+using TryOnVerse.API.Models;
+using TryOnVerse.API.DTOs;
+using TryOnVerse.API.Helpers;
 
 namespace TryOnVerse.API.Controllers;
 
@@ -17,35 +20,64 @@ public class UsersController : ControllerBase
 
     // POST: api/users
     [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] User user)
+    public async Task<IActionResult> CreateUser([FromBody] RegisterUserDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        // TODO: Hash the password before saving
-        // user.PasswordHash = HashPassword(user.PasswordHash);
+        // Check if email already exists
+        if (await _context.Users.AnyAsync(u => u.Email == dto.Email))
+            return Conflict("A user with this email already exists.");
+
+        var user = new User
+        {
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            Email = dto.Email,
+            Role = dto.Role,
+            PasswordHash = PasswordHasher.HashPassword(dto.Password),
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+            // Navigation properties are already initialized in the User class
+        };
 
         _context.Users.Add(user);
         await _context.SaveChangesAsync();
 
-        // Return 201 Created with created user info
-        return CreatedAtAction(nameof(GetUserByEmail), new { email = user.Email }, user);
+        // Return 201 Created with location pointing to GetUserByEmail
+        return CreatedAtAction(nameof(GetUserByEmail), new { email = user.Email }, new
+        {
+            user.UserID,
+            user.FirstName,
+            user.LastName,
+            user.Email,
+            user.Role,
+            user.CreatedAt,
+            user.UpdatedAt
+        });
     }
 
-    // TODO: replace this with something like authenticate user api call that posts the password hash???
-    // GET: api/users?email=sergei@example.com
+    // GET: api/users?email=example@example.com
     [HttpGet]
     public async Task<IActionResult> GetUserByEmail([FromQuery] string email)
     {
         if (string.IsNullOrEmpty(email))
             return BadRequest("Email is required.");
 
-        var user = await _context.Users
-            .FirstOrDefaultAsync(u => u.Email == email);
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
         if (user == null)
             return NotFound();
 
-        return Ok(user);
+        return Ok(new
+        {
+            user.UserID,
+            user.FirstName,
+            user.LastName,
+            user.Email,
+            user.Role,
+            user.CreatedAt,
+            user.UpdatedAt
+        });
     }
 }

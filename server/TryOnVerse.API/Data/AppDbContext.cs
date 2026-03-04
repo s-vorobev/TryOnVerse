@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using TryOnVerse.API.Models;
+
 
 namespace TryOnVerse.API.Data;
 
