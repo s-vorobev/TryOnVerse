@@ -20,7 +20,8 @@ public class UsersController : ControllerBase
 
     // POST: api/users
     [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] RegisterUserDto dto)
+    [Route("customers")]
+    public async Task<IActionResult> CreateCustomer([FromBody] RegisterCustomerDto dto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -34,10 +35,11 @@ public class UsersController : ControllerBase
             FirstName = dto.FirstName,
             LastName = dto.LastName,
             Email = dto.Email,
-            Role = dto.Role,
+            Role = "Customer",
             PasswordHash = PasswordHasher.HashPassword(dto.Password),
             CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
+            UpdatedAt = DateTime.UtcNow,
+            IsActive = true
             // Navigation properties are already initialized in the User class
         };
 
@@ -45,7 +47,7 @@ public class UsersController : ControllerBase
         await _context.SaveChangesAsync();
 
         // Return 201 Created with location pointing to GetUserByEmail
-        return CreatedAtAction(nameof(GetUserByEmail), new { email = user.Email }, new
+        return CreatedAtAction(nameof(GetUser), new { id = user.UserID }, new
         {
             user.UserID,
             user.FirstName,
@@ -53,18 +55,17 @@ public class UsersController : ControllerBase
             user.Email,
             user.Role,
             user.CreatedAt,
-            user.UpdatedAt
+            user.UpdatedAt,
+            user.IsActive
         });
     }
 
-    // GET: api/users?email=example@example.com
-    [HttpGet]
-    public async Task<IActionResult> GetUserByEmail([FromQuery] string email)
+    // GET: api/users/id
+    [HttpGet("{id:int}")]
+    public async Task<IActionResult> GetUser(int id)
     {
-        if (string.IsNullOrEmpty(email))
-            return BadRequest("Email is required.");
-
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        var user = await _context.Users
+            .FirstOrDefaultAsync(u => u.UserID == id && u.IsActive);
 
         if (user == null)
             return NotFound();
@@ -77,7 +78,34 @@ public class UsersController : ControllerBase
             user.Email,
             user.Role,
             user.CreatedAt,
-            user.UpdatedAt
+            user.UpdatedAt,
+            user.IsActive
         });
     }
+
+
+    // TODO: include password protection so people can't just steal others' information
+    // GET: api/users?email=example@example.com
+    // [HttpGet]
+    // public async Task<IActionResult> GetUserByEmail([FromQuery] string email)
+    // {
+    //     if (string.IsNullOrEmpty(email))
+    //         return BadRequest("Email is required.");
+
+    //     var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+    //     if (user == null)
+    //         return NotFound();
+
+    //     return Ok(new
+    //     {
+    //         user.UserID,
+    //         user.FirstName,
+    //         user.LastName,
+    //         user.Email,
+    //         user.Role,
+    //         user.CreatedAt,
+    //         user.UpdatedAt
+    //     });
+    // }
 }

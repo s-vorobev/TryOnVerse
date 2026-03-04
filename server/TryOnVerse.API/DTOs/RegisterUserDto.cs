@@ -2,7 +2,7 @@ namespace TryOnVerse.API.DTOs;
 
 using System.ComponentModel.DataAnnotations;
 
-public class RegisterUserDto
+public class RegisterCustomerDto
 {
     [Required]
     [MaxLength(50)]
@@ -20,7 +20,4 @@ public class RegisterUserDto
     [Required]
     [MinLength(12)]
     public string Password { get; set; } = null!;
-
-    [MaxLength(20)]
-    public string Role { get; set; } = "Customer";
 }

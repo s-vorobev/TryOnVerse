@@ -36,6 +36,9 @@ public class User
 
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
+    [Required]
+    public bool IsActive { get; set; } = true;
+
     // Navigation Properties
     public ICollection<Cart> Carts { get; set; } = new List<Cart>();
     public ICollection<Address> Addresses { get; set; } = new List<Address>();
