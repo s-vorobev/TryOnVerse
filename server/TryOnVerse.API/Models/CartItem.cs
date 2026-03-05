@@ -7,6 +7,7 @@ using TryOnVerse.API.Common;
 
 public class CartItem
 {
+    [Key]
     public int CartItemID { get; set; }
 
     [Required]

@@ -7,6 +7,7 @@ using TryOnVerse.API.Common;
 
 public class Payment
 {
+    [Key]
     public int PaymentID { get; set; }
 
     [Required]

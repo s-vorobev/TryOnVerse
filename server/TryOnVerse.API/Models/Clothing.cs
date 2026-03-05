@@ -13,6 +13,7 @@ public enum ClothingType
 
 public class Clothing
 {
+    [Key]
     public int ClothingID { get; set; }
 
     [Required, MaxLength(DbConstants.Clothing.NameMaxLength)]

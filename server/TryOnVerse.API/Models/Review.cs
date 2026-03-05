@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public class Review
 {
+    [Key]
     public int ReviewID { get; set; }
 
     [Required]

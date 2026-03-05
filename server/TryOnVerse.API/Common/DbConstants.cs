@@ -15,7 +15,6 @@ public static class DbConstants
     public static class RefreshToken
     {
         public const int TokenMaxLength = 255;
-        public const int TokenDuration = 86400000; // 24 hours in milliseconds
     }
 
     public static class Payment

@@ -8,6 +8,7 @@ using TryOnVerse.API.Common;
 
 public class User
 {
+    [Key]
     public int UserID { get; set; }
 
     [Required]

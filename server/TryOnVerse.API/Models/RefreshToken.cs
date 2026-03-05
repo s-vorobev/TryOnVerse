@@ -7,6 +7,7 @@ using TryOnVerse.API.Common;
 
 public class RefreshToken
 {
+    [Key]
     public int TokenId { get; set; }
 
     [Required]

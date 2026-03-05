@@ -7,6 +7,7 @@ using TryOnVerse.API.Common;
 
 public class Address
 {
+    [Key]
     public int AddressID { get; set; }
 
     [Required]

@@ -6,6 +6,7 @@ using TryOnVerse.API.Common;
 
 public class OrderItem
 {
+    [Key]
     public int OrderItemID { get; set; }
 
     [Required]
