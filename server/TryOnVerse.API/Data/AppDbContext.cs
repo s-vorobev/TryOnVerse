@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TryOnVerse.API.Models;
 
-
 namespace TryOnVerse.API.Data;
 
 public class AppDbContext : DbContext
@@ -13,6 +12,7 @@ public class AppDbContext : DbContext
 
     // DbSets = tables
     public DbSet<User> Users { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,5 +31,11 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<User>()
             .Property(u => u.UpdatedAt)
             .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+        // One-to-one relationship: each user has one refresh token
+        modelBuilder.Entity<User>()
+            .HasMany(u => u.RefreshTokens)
+            .WithOne(rt => rt.User)
+            .HasForeignKey(rt => rt.UserID);
     }
 }

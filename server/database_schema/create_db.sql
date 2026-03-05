@@ -110,3 +110,13 @@ CREATE TABLE Reviews (
     FOREIGN KEY (ClothingID) REFERENCES Clothing(ClothingID),
     CONSTRAINT uq_user_clothing_review UNIQUE (UserID, ClothingID)
 ) ENGINE=InnoDB;
+
+CREATE TABLE RefreshTokens (
+    TokenId INT AUTO_INCREMENT PRIMARY KEY,
+    UserId INT NOT NULL,
+    Token VARCHAR(255) NOT NULL,
+    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ExpiresAt DATETIME NOT NULL,
+    IsRevoked BOOLEAN NOT NULL DEFAULT FALSE,
+    FOREIGN KEY (UserId) REFERENCES Users(UserID)
+) ENGINE=InnoDB;
